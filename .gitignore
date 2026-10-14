@@ -1,0 +1,19 @@
+# === Build output / ビルド生成物 ===
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# === Reference assemblies are NOT redistributed ===
+# ゲーム側/BepInEx のアセンブリは同梱しない。lib/README.md の手順で各自が配置する。
+# lib/README.md 自体は追跡する。
+Composition Director/lib/*
+!Composition Director/lib/README.md
+
+# === Shortcuts (contain absolute paths) / ショートカット ===
+*.lnk
+
+# === OS ===
+Thumbs.db
+desktop.ini

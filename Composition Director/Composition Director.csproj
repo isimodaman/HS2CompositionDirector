@@ -1,0 +1,82 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net46</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <!--
+      No debug symbols. A default Debug build writes the absolute path of the .pdb
+      into the PE debug directory, which leaks the folder layout of the machine
+      that built it. Remove these two lines if you want to debug locally.
+
+      デバッグシンボルを出力しない。既定の Debug ビルドは PE の debug directory へ
+      .pdb の絶対パスを書き込むため、ビルドした環境のフォルダ構成が露出する。
+      ローカルでデバッグしたい場合はこの2行を外す。
+    -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="lib\**" />
+    <EmbeddedResource Remove="lib\**" />
+    <None Remove="lib\**" />
+  </ItemGroup>
+
+  <!--
+    Game assemblies are NOT redistributed with this repository.
+    Copy them from your own installation into lib\ before building.
+    See lib\README.md for the required file list.
+
+    ゲーム側のアセンブリはライセンス上リポジトリに同梱していない。
+    ビルド前に自分のインストール先から lib\ へコピーすること。
+    必要なファイルは lib\README.md を参照。
+  -->
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>lib\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>lib\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>lib\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="IL">
+      <HintPath>lib\IL.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>lib\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>lib\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>lib\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!--
+    Optional auto-deploy. Set HS2GameDir to your game root to copy the built
+    DLL straight into BepInEx\plugins\. Skipped entirely when unset.
+
+      dotnet build -p:HS2GameDir="D:\Games\HoneySelect2"
+
+    任意の自動配置。HS2GameDir にゲームのルートを指定すると、
+    ビルド成果物が BepInEx\plugins\ へコピーされる。未指定なら何もしない。
+  -->
+  <Target Name="DeployToGame" AfterTargets="PostBuildEvent"
+          Condition="'$(HS2GameDir)' != '' AND Exists('$(HS2GameDir)')">
+    <MakeDir Directories="$(HS2GameDir)\BepInEx\plugins\CompositionDirector\" />
+    <Copy SourceFiles="$(TargetPath)"
+          DestinationFolder="$(HS2GameDir)\BepInEx\plugins\CompositionDirector\" />
+    <Message Importance="high" Text="Deployed to $(HS2GameDir)\BepInEx\plugins\CompositionDirector\" />
+  </Target>
+
+</Project>

@@ -1,0 +1,8 @@
+# Disable all line-ending conversion.
+# The source is UTF-8 without BOM, CRLF; storing it verbatim keeps the published
+# source byte-identical to the build that was actually tested.
+#
+# 改行コードの自動変換を全面的に無効化する。
+# ソースは UTF-8 BOMなし・CRLF。そのまま格納することで、
+# 公開ソースと実際に動作確認したビルドのバイト一致を保つ。
+* -text

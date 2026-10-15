@@ -1,4 +1,4 @@
-# Composition Director
+# Composition Director for GAME
 
 A BepInEx plugin for **Honey Select 2 / Honey Select 2 Libido DX** that saves and restores
 character placement, camera composition and FOV **per animation (position)**.
